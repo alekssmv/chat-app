@@ -2,12 +2,12 @@
 services:
   php:
     build:
-      context: .
+      context: ./symfony
       target: frankenphp_dev
     volumes:
-      - ./:/app
-      - ./frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro
+      - ./symfony:/app
+      - ./symfony/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./symfony/frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro
       # If you develop on Mac or Windows you can remove the vendor/ directory
       #  from the bind-mount for better performance by enabling the next line:
       #- /app/vendor
@@ -19,6 +19,19 @@ services:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
     tty: true
+
+  # nuxt
+  nuxt:
+    build:
+      context: ./nuxt
+      dockerfile: ./Dockerfile.dev
+    ports:
+    
+      - '3000:3000'
+      - '24678:24678'
+    volumes:
+      - ./nuxt:/src
+      - ./nuxt/node_modules:/src/node_modules
 
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
